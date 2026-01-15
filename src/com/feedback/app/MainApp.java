@@ -17,6 +17,7 @@ public class MainApp {
             System.out.println("2. View All Feedback");
             System.out.println("3. View Feedback by Sentiment");
             System.out.println("4. Exit");
+            System.out.println("5. View Summary Count");
             System.out.print("Enter your choice: ");
 
             choice = Integer.parseInt(sc.nextLine());
@@ -59,6 +60,9 @@ public class MainApp {
 
                 case 4:
                     System.out.println("Exiting... Bye!");
+                    break;
+                case 5:
+                    dao.getSummaryCount();
                     break;
 
                 default:

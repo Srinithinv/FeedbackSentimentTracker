@@ -50,6 +50,43 @@ public class FeedbackDAO {
 
         return list;
     }
+    
+    public void getSummaryCount() {
+
+        String sql = "SELECT sentiment, COUNT(*) AS count FROM feedback GROUP BY sentiment";
+
+        int positive = 0, negative = 0, neutral = 0, total = 0;
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String sentiment = rs.getString("sentiment");
+                int count = rs.getInt("count");
+
+                if (sentiment.equalsIgnoreCase("positive")) {
+                    positive = count;
+                } else if (sentiment.equalsIgnoreCase("negative")) {
+                    negative = count;
+                } else if (sentiment.equalsIgnoreCase("neutral")) {
+                    neutral = count;
+                }
+            }
+
+            total = positive + negative + neutral;
+
+            System.out.println("\n--- Feedback Summary ---");
+            System.out.println("Total Feedback: " + total);
+            System.out.println("Positive: " + positive);
+            System.out.println("Negative: " + negative);
+            System.out.println("Neutral : " + neutral);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public List<Feedback> getFeedbackBySentiment(String sentiment) {
         List<Feedback> list = new ArrayList<>();

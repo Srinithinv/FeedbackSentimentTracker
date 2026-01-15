@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit Feedback</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #f5e6ff, #e8f0ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            padding: 35px 40px;
+            border-radius: 24px;
+            width: 420px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.15);
+        }
+
+        h2 {
+            margin-top: 0;
+            text-align: center;
+            color: #5a2ca0;
+            margin-bottom: 20px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            outline: none;
+            margin-bottom: 16px;
+        }
+
+        textarea {
+            resize: none;
+            height: 90px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #7b2ff7, #b04cff);
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(123,47,247,0.4);
+        }
+
+        .msg {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
+            color: green;
+        }
+        .popup {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: linear-gradient(135deg, #7b2ff7, #b04cff);
+    color: white;
+    padding: 14px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 0.4s ease;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+.popup.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>Send Your Feedback</h2>
+
+    <input type="text" id="username" placeholder="Your Name" required>
+    <textarea id="comment" placeholder="Write your feedback here..." required></textarea>
+
+    <button onclick="submitFeedback()">Submit Feedback</button>
+
+    <div class="msg" id="msg"></div>
+<div class="popup" id="popup">Feedback Submitted 💜</div>
+
+</div>
+
+<script>
+    setInterval(() => {
+   location.reload();
+}, 5000); 
+function submitFeedback() {
+
+    const name = document.getElementById("username").value;
+    const comment = document.getElementById("comment").value;
+
+    if(name === "" || comment === "") {
+        alert("Please fill all fields");
+        return;
+    }
+
+    const text = name + "||" + comment + "\n";
+
+    const blob = new Blob([text], { type: "text/plain" });
+
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "feedback_input.txt";
+    a.click();
+
+    const popup = document.getElementById("popup");
+popup.classList.add("show");
+
+setTimeout(() => popup.classList.remove("show"), 2500);
+
+
+    document.getElementById("username").value = "";
+    document.getElementById("comment").value = "";
+}
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback Analytics Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #f5e6ff, #e8f0ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .dashboard {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(15px);
+            border-radius: 24px;
+            padding: 30px 35px;
+            width: 460px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        h2 {
+            margin: 0;
+            margin-bottom: 10px;
+            color: #5a2ca0;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .subtitle {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        canvas {
+            margin-top: 10px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #888;
+        }
+        button {
+    margin-top: 18px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #7b2ff7, #b04cff);
+    color: white;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(123,47,247,0.4);
+}
+
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard">
+    <h2>Feedback Sentiment Overview</h2>
+    <div class="subtitle">Real-time analysis from user responses</div>
+
+    <canvas id="myChart"></canvas>
+     
+    <button id="toggleBtn">Switch Chart View</button>
+
+
+    <div class="footer">Powered by Java · MySQL · Chart.js</div>
+</div>
+
+<script>
+let chart;
+let currentType = "doughnut";
+
+fetch("data.json")
+  .then(res => res.json())
+  .then(data => {
+
+    const ctx = document.getElementById('myChart');
+
+    function createChart(type) {
+
+      if (chart) chart.destroy();
+const shadowPlugin = {
+  id: 'shadow',
+  beforeDraw(chart) {
+    const ctx = chart.ctx;
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.15)';
+    ctx.shadowBlur = 25;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 10;
+  }
+};
+
+      chart = new Chart(ctx, {
+        
+  plugins: [shadowPlugin],
+
+        type: type,
+        data: {
+          labels: ['Positive', 'Negative', 'Neutral'],
+          datasets: [{
+            data: [data.positive, data.negative, data.neutral],
+           backgroundColor: [
+  'rgba(72, 219, 251, 0.9)',   // 💎 Positive – aqua blue
+  'rgba(255, 99, 132, 0.9)',   // 🔥 Negative – pink red
+  'rgba(200, 214, 229, 0.9)'   // ☁ Neutral – cloud grey
+],
+
+
+            borderRadius: type === "bar" ? 12 : 0,
+            hoverOffset: 18
+          }]
+        },
+        options: {
+          cutout: type === "doughnut" ? "55%" : 0,
+          animation: { duration: 1400 },
+          plugins: {
+            legend: { position: "bottom" }
+          },
+          scales: type === "bar" ? {
+            y: { beginAtZero: true }
+          } : {}
+        }
+      });
+    }
+
+    createChart("doughnut");
+
+    document.getElementById("toggleBtn").addEventListener("click", () => {
+      currentType = currentType === "doughnut" ? "bar" : "doughnut";
+      createChart(currentType);
+    });
+
+});
+</script>
+
+
+</body>
+</html>
