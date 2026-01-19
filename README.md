@@ -16,5 +16,6 @@ Database: MySQL
 Frontend: HTML, CSS, JavaScript  
 Visualization: Chart.js  
 
-Project Structure
+<img width="1919" height="868" alt="image" src="https://github.com/user-attachments/assets/7e1111d3-60ae-4946-9ee9-b67d08756a94" />
+
 
